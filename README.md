@@ -7,6 +7,22 @@
 - Python 3.6或以上
 - cv2
 
+### 运行代码
+
+首先确保电脑已经安装了Python的环境以及安装了`cv2`的依赖
+
+> 克隆代码
+```shell
+$ git clone git@github.com:xiaomo-23/VideoFrame.git
+```
+> 运行代码
+
+进入到项目路径下，确保在项目的根目录下
+
+```shell
+$ python main.py
+```
+
 ### 软件打包
 
 首先需要安装 `pyinstaller`
