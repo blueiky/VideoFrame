@@ -19,7 +19,7 @@ class Application(tk.Frame):
         self.interval = tk.StringVar(value="10")
         self.btn_text = tk.StringVar(value="")
         # 设置窗口大小
-        master.geometry('520x180')
+        master.geometry('520x220')
         master.title("视频抽帧")
         self.initial_frame()
 
@@ -59,11 +59,11 @@ class Application(tk.Frame):
         interval = str(self.interval.get())
         video_file = str(self.video_file_path)
         pic_dir_path = str(self.pic_dir_path)
-        if len(video_file) == 0:
+        if len(video_file) == 0 or video_file == 'PY_VAR4' or video_file == "None":
             messagebox.showerror("警告", "还没有选择视频文件")
             return
 
-        if len(pic_dir_path) == 0:
+        if len(pic_dir_path) == 0 or pic_dir_path == "PY_VAR5" or pic_dir_path == 'None':
             messagebox.showerror("警告", "还没有选择图片的存放路径")
             return
 
@@ -77,11 +77,10 @@ class Application(tk.Frame):
     def get_video_frame(self, video_path, dir_path, interval):
         # 获取视频名称
         video_name = video_path.split("/")[-1].split(".")[0]
-        is_exists = os.path.exists(dir_path)
-        if not is_exists:
+        shutil.rmtree(dir_path)
+        if not os.path.exists(dir_path):
             os.makedirs(dir_path)
         else:
-            shutil.rmtree(dir_path)
             os.makedirs(dir_path)
 
         video_capture = cv2.VideoCapture(video_path)
@@ -92,10 +91,12 @@ class Application(tk.Frame):
             i += 1
             if i % int(interval) == 0:
                 count += 1
-                pic_path = dir_path + "/" + video_name + "_" + str(i) + ".jpg"
-                cv2.imwrite(pic_path, frame)
+                pic_path = "{}/{}_{}.jpg".format(dir_path, video_name, str(i))
+                cv2.imencode(".jpg", frame)[1].tofile(pic_path)
             if not success:
                 self.btn_text.set("程序已完成抽帧，请前往目录查看")
+                self.video_file_path = tk.StringVar().set("")
+                self.pic_dir_path = tk.StringVar().set("")
                 break
 
 
